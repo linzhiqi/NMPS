@@ -12,11 +12,12 @@ import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import rtsp.RTSPSession;
+import rtsp.RTSPStack;
+
 import ItunezAPI.ItunezRequest;
 import ItunezAPI.ItunezResponse;
 import ItunezAPI.PlayList;
-import RTSP.RTSPSession;
-import RTSP.RTSPStack;
 
 import util.ResourceManager;
 

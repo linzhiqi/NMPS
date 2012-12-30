@@ -1,4 +1,4 @@
-package RTSP;
+package rtsp;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -9,9 +9,9 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 
-import transport.RTPpacket;
-import transport.SendRTPTask;
-import transport.transport;
+import rtp.RTPpacket;
+import rtp.SendRTPTask;
+import rtp.RTPServer;
 import util.ResourceManager;
 
 public class RTSPSession {
@@ -35,7 +35,7 @@ public class RTSPSession {
 	private String resource;
 	private int[] clientport = new int[2];
 	private int[] serverport = new int[2];
-	private transport rtpmanager = null;
+	private RTPServer rtpmanager = null;
 	private String audioFileName;
 	private BufferedReader RTSPBufferedReader;
 	private BufferedWriter RTSPBufferedWriter;
@@ -117,7 +117,7 @@ public class RTSPSession {
 					this.clientport[0] = Integer.parseInt(str[0]);
 					this.clientport[1] = Integer.parseInt(str[1]);
 					try {
-						this.rtpmanager = new transport(
+						this.rtpmanager = new RTPServer(
 								this.stack.getResourceManager());
 					} catch (SocketException e) {
 						// TODO Auto-generated catch block
@@ -160,8 +160,8 @@ public class RTSPSession {
 								+ ";timeout=60");
 						response.setHeader("RTP-Info",
 								"url=" + request.getUri() + ";seq="
-										+ transport.SeqIni + ";rtptime="
-										+ transport.timestampIni);
+										+ RTPServer.SeqIni + ";rtptime="
+										+ RTPServer.timestampIni);
 						response.setHeader("Range", "npt=0.000-");
 						response.setHeader("Cache-Control", "no-cache");
 					} else {

@@ -1,4 +1,4 @@
-package transport;
+package rtp;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,7 +9,7 @@ import java.util.Timer;
 
 import util.ResourceManager;
 
-public class transport {
+public class RTPServer {
 	public static int timestampIni = 225;
 	public static int SeqIni = 1;
 	
@@ -26,7 +26,7 @@ public class transport {
 	private FileInputStream iStream;
 	private SendRTPTask rtpTask;
 	
-	public transport(ResourceManager remanager) throws SocketException{
+	public RTPServer(ResourceManager remanager) throws SocketException{
 		this.reManager = remanager;
 		this.serverSocket[0] = new DatagramSocket();
 		this.serverSocket[1] = new DatagramSocket();

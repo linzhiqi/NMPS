@@ -1,12 +1,12 @@
-package RTSP;
+package rtsp;
 
 import java.util.Hashtable;
 import java.util.Map.Entry;
 
 public class RTSPResponse {
 	
-	public static final String ok = "RTSP/1.0 200 OK";
-	public static final String error = "RTSP/1.0 400 Bad Request";
+	public static final String ok = "rtsp/1.0 200 OK";
+	public static final String error = "rtsp/1.0 400 Bad Request";
 	final static String CRLF = "\r\n";
 	private int code;
 	private String responseLine;

@@ -1,4 +1,4 @@
-package transport;
+package rtp;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -17,12 +17,12 @@ public class SendRTPTask extends TimerTask {
 	private DatagramPacket senddp;
 	private InetAddress desIp;
 	private int desPort;
-	private transport trans;
+	private RTPServer trans;
 	
 	public static int PCMA_TYPE = 8;
 	public static int Dynamic_RTP = 96;
 	
-	public SendRTPTask(transport t, FileInputStream stream, long size, DatagramSocket socket, InetAddress ip, int port){
+	public SendRTPTask(RTPServer t, FileInputStream stream, long size, DatagramSocket socket, InetAddress ip, int port){
 		this.trans = t;
 		this.istream = stream;
 		this.size = size;
