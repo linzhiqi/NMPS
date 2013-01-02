@@ -15,25 +15,15 @@ import java.util.Map.Entry;
 
 public class PlayList {
 	
-	class ResourcePresentation{
-		private String title;
-		private String rtspUrl;
-		
-		public ResourcePresentation(String title, String url){
-			this.title = title;
-			this.rtspUrl = url;
-		}
-		
-		public String print(){
-			return "title="+this.title+"\n"+"url="+this.rtspUrl+"\n";
-		}
-	}
-	
 	private ArrayList<ResourcePresentation> playlist = new ArrayList<ResourcePresentation>();
 	
 	public void addResource(String title, String url){
 		
 		this.playlist.add(new ResourcePresentation(title,url));		
+	}
+	
+	public ArrayList<ResourcePresentation> getResourceList(){
+		return this.playlist;
 	}
 	
 	public String serialize(){
@@ -52,6 +42,7 @@ public class PlayList {
 		String url = null;
 		String line = null;
 		while((line = reader.readLine() )!= null){
+			//System.out.println(line);
 			if(line.contains("title=")){
 				title = line.substring(line.indexOf("title=")+6);
 				if((line = reader.readLine())!=null){

@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class PlaylistServer implements Runnable {
 			try {
 				serveSocket = this.listeningSocket.accept();
 				// reconsider the timeout here
-				serveSocket.setSoTimeout(100000);
+				serveSocket.setSoTimeout(60000);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -91,7 +92,7 @@ public class PlaylistServer implements Runnable {
 				PlayList list = this.server.generateList();
 				response.setResponseLine(ItunezResponse.OK);
 				response.setContent(list.serialize());
-
+				System.out.println(response.printResponse());
 			} else {
 				if (ioexception) {
 					response.setResponseLine(ItunezResponse.INTERNAL_ERROR);
@@ -99,6 +100,7 @@ public class PlaylistServer implements Runnable {
 					response.setResponseLine(ItunezResponse.BAD_REQUEST);
 				}
 			}
+			
 			try {
 				sendResponse(response.printResponse());
 			} catch (IOException e) {
@@ -116,10 +118,11 @@ public class PlaylistServer implements Runnable {
 		}
 
 		public void sendResponse(String message) throws IOException {
-			OutputStreamWriter writer = new OutputStreamWriter(
+			PrintWriter writer = new PrintWriter(
 					this.socket.getOutputStream());
 			
 			writer.write(message);
+			writer.flush();
 		}
 	}
 
@@ -133,5 +136,12 @@ public class PlaylistServer implements Runnable {
 					+ RTSPStack.rtspport + "/" + filename);
 		}
 		return list;
+	}
+	
+	
+	public final static void main(String[] args){
+		ResourceManager rManager = new ResourceManager("C:\\Users\\Vita\\Documents\\study\\3152\\assignment");
+		PlaylistServer server = new PlaylistServer(Integer.parseInt(args[0]), rManager);
+		new Thread(server).start();
 	}
 }

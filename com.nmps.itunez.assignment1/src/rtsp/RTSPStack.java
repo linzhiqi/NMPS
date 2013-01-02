@@ -38,6 +38,7 @@ public class RTSPStack implements Runnable {
 		this.listeningPort = listeningPort;
 		try {
 			this.listeningSocket = new ServerSocket(this.listeningPort);
+			System.out.println("rstpstack start to listion on port:"+listeningPort);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -51,6 +52,7 @@ public class RTSPStack implements Runnable {
 				serveSocket = this.listeningSocket.accept();
 				//reconsider the timeout here
 				serveSocket.setSoTimeout(100000);
+				System.out.println("accept request");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

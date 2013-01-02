@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
@@ -38,7 +39,8 @@ public class RTSPSession {
 	private RTPServer rtpmanager = null;
 	private String audioFileName;
 	private BufferedReader RTSPBufferedReader;
-	private BufferedWriter RTSPBufferedWriter;
+	//private BufferedWriter RTSPBufferedWriter;
+	private PrintWriter RTSPBufferedWriter;
 
 	RTSPSession(String uuid, Socket socket) throws IOException {
 		this.sessionId = uuid;
@@ -48,8 +50,8 @@ public class RTSPSession {
 
 		this.RTSPBufferedReader = new BufferedReader(new InputStreamReader(
 				this.socket.getInputStream()));
-		this.RTSPBufferedWriter = new BufferedWriter(new OutputStreamWriter(
-				this.socket.getOutputStream()));
+		//this.RTSPBufferedWriter = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
+		this.RTSPBufferedWriter = new PrintWriter(this.socket.getOutputStream());
 	}
 
 	void setTheStack(RTSPStack stackInstance) {
@@ -79,7 +81,6 @@ public class RTSPSession {
 			System.out.println("method=" + request.getMethod());
 
 			if (request.getMethod().equals(RTSPRequest.option)) {
-				System.out.println("inside");
 				response.setCode(true);
 				response.setHeader("Content-length", "0");
 				response.setHeader("Public", this.options);
@@ -299,7 +300,7 @@ public class RTSPSession {
 		return uri.substring(index + 1).trim();
 	}
 
-	public void sendResponse(BufferedWriter writer, String message)
+	public void sendResponse(PrintWriter writer, String message)
 			throws IOException {
 		System.out.println("response message:\n" + message);
 		writer.write(message);
