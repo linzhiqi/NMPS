@@ -38,7 +38,7 @@ public class RTSPStack implements Runnable {
 		this.listeningPort = listeningPort;
 		try {
 			this.listeningSocket = new ServerSocket(this.listeningPort);
-			System.out.println("rstpstack start to listion on port:"+listeningPort);
+			System.out.println("rstpstack starts listening on port:"+listeningPort);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

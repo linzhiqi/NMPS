@@ -11,6 +11,7 @@ public class FileHelper {
 	public FileHelper(String dir) {
 		this.base = dir;
 	}
+	
 
 	public FileHelper() {
 

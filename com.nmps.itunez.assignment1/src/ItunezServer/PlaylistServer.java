@@ -36,6 +36,7 @@ public class PlaylistServer implements Runnable {
 		this.port = port;
 		try {
 			this.listeningSocket = new ServerSocket(this.port);
+			System.out.println("playlist server starts listening on port:" +this.port);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

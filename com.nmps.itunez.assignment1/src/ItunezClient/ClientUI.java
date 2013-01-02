@@ -22,15 +22,20 @@ public class ClientUI {
 	public static enum UiState {
 		ini, playing
 	}
+
 	private String vlcPath = "C://Program Files (x86)//VideoLAN//VLC//vlc.exe";
 	private PlayList playlist;
 	private ResourcePresentation currentResource;
 	private int currentId;
 	private UiState state = UiState.ini;
-
+	private Process p;
 
 	public void setPlayList(PlayList list) {
 		this.playlist = list;
+		if(this.playlist==null){
+			System.out.println("no playlist available");
+			return;
+		}
 		this.currentResource = this.playlist.getResourceList().get(0);
 		this.currentId = 0;
 	}
@@ -51,9 +56,8 @@ public class ClientUI {
 	public final static void main(String[] args) throws IOException {
 
 		ClientUI ui = new ClientUI();
-		
+
 		Scanner sc = new Scanner(System.in);
-		
 
 		ItunezClient client = new ItunezClient(args[0],
 				Integer.parseInt(args[1]));
@@ -73,117 +77,111 @@ public class ClientUI {
 			ui.printCurrentResource();
 			System.out.print(">");
 			String input = sc.nextLine();
-			if(input==null){
+			if (input == null) {
 				System.out.println("null input");
 			}
-			if (input.equals("next")) {
-				if (ui.state == UiState.ini) {
-					ui.playNext();
-					ui.state = UiState.playing;
-				}else{
-					System.out.println("invalide command");
-				}
+			if (input.equals("play")) {
+				ui.play();
+			} else if (input.equals("next")) {
+
+				ui.playNext();
 
 			} else if (input.equals("previous")) {
-				if (ui.state == UiState.ini) {
-					ui.playPrevious();
-					ui.state = UiState.playing;
-				}else{
-					System.out.println("invalide command");
-				}
+
+				ui.playPrevious();
 
 			} else if (input.equals("id")) {
-				if (ui.state == UiState.ini) {
-					System.out.print("Type the id of resource to play\n>");
-					input = sc.nextLine();
-					if(input==null){
-						System.out.println("null input");
-					}
-					System.out.println(input);
-					int id = Integer.parseInt(input);
-					ui.playResource(id);
-					ui.state = UiState.playing;
-				}else{
-					System.out.println("invalide command");
-				}
-			} else if (input.equals("teardown")) {
-				if (ui.state == UiState.playing) {
-					ui.tearDown();
-					ui.state = UiState.ini;
-				}else{
-					System.out.println("invalide command");
-				}
 
-			} else if (input.equals("newlist")) {
-				if (ui.state == UiState.ini) {
+				System.out.print("Type the id of resource to play\n>");
+				input = sc.nextLine();
+				if (input == null) {
+					System.out.println("null input");
+				}
+				System.out.println(input);
+				int id = Integer.parseInt(input);
+				ui.playResource(id);
 
-					client = new ItunezClient(args[0],
-							Integer.parseInt(args[1]));
-					try {
-						ui.setPlayList(client.requestPlayList());
-					} catch (InvalidePlayListException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (InvalidePlayListResponse e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}else{
-					System.out.println("invalide command");
+			} /*
+			 * else if (input.equals("teardown")) { if (ui.state ==
+			 * UiState.playing) { ui.tearDown(); ui.state = UiState.ini; }else{
+			 * System.out.println("invalide command"); }
+			 * 
+			 * }
+			 */else if (input.equals("newlist")) {
+
+				client = new ItunezClient(args[0], Integer.parseInt(args[1]));
+				try {
+					ui.setPlayList(client.requestPlayList());
+				} catch (InvalidePlayListException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvalidePlayListResponse e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 
 			}
 		}
 
 	}
-	
+
 	private void playPrevious() {
 		// TODO Auto-generated method stub
-		
+		if ((this.currentId - 1 < 0)
+				|| (this.currentId - 1 > this.playlist.getResourceList().size())) {
+			this.state = UiState.ini;
+			return;
+		}
+
+		this.currentId--;
+		this.currentResource = this.playlist.getResourceList().get(
+				this.currentId);
+		play();
 	}
 
 	private void tearDown() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	public void playResource(int id){
-		if((id<0)||(id>this.playlist.getResourceList().size())){
+	public void playResource(int id) {
+		if ((id < 0) || (id > this.playlist.getResourceList().size())) {
 			this.state = UiState.ini;
 			return;
 		}
-		
+
 		this.currentId = id;
 		this.currentResource = this.playlist.getResourceList().get(id);
-		
-		try {
-            Runtime.getRuntime().exec(new String[]{this.vlcPath,"--play-and-exit",this.currentResource.getUrl()});
-        } catch (IOException ioe) {
-            System.err.println("IO exception: " + ioe.getMessage());
-        }
-		
-	}
-	
 
-	
-	public void playNext(){
-		if((this.currentId+1<0)||(this.currentId+1>this.playlist.getResourceList().size())){
+		play();
+
+	}
+
+	public void playNext() {
+		if ((this.currentId + 1 < 0)
+				|| (this.currentId + 1 > this.playlist.getResourceList().size())) {
 			this.state = UiState.ini;
 			return;
 		}
-		
+
 		this.currentId++;
-		this.currentResource = this.playlist.getResourceList().get(this.currentId);
-		
+		this.currentResource = this.playlist.getResourceList().get(
+				this.currentId);
+
+		play();
+
 	}
-	
-	private void play(){
+
+	public void play() {
 		try {
-            Runtime.getRuntime().exec(new String[]{"C://Program Files (x86)//VideoLAN//VLC//vlc.exe",
-            		"--play-and-exit",this.currentResource.getUrl()});
-        } catch (IOException ioe) {
-            System.err.println("IO exception: " + ioe.getMessage());
-        }
+			this.p = Runtime.getRuntime().exec(
+					new String[] {
+							"C://Program Files (x86)//VideoLAN//VLC//vlc.exe",
+							"--play-and-exit", this.currentResource.getUrl() });
+		} catch (IOException ioe) {
+			System.err.println("IO exception: " + ioe.getMessage());
+		}
+
 	}
 
 	public void printCurrentResource() {
@@ -199,15 +197,18 @@ public class ClientUI {
 		System.out
 				.println("+--------------------------------------------------+");
 		System.out
+				.println("| play         | play current resource             |");
+		System.out
 				.println("| next         | play next resource                |");
 		System.out
 				.println("| previouse    | play previous resource            |");
 		System.out
 				.println("| id           | play resource by id               |");
-		System.out
-				.println("| teardown     | teardown current stream           |");
+		// System.out.println("| teardown     | teardown current play             |");
 		System.out
 				.println("| newlist      | request new playlist from server  |");
+		System.out
+				.println("| quit         | quit application                  |");
 		System.out
 				.println("+--------------------------------------------------+");
 	}
