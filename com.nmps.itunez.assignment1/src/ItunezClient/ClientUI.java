@@ -29,6 +29,10 @@ public class ClientUI {
 	private int currentId;
 	private UiState state = UiState.ini;
 	private Process p;
+	
+	public void setVlcPath(String path){
+		this.vlcPath = path;
+	}
 
 	public void setPlayList(PlayList list) {
 		this.playlist = list;
@@ -54,8 +58,15 @@ public class ClientUI {
 	}
 
 	public final static void main(String[] args) throws IOException {
-
 		ClientUI ui = new ClientUI();
+		
+		if(args.length<2||args.length>3){
+			System.out.println("ClientUI  playlist_server_ip  playlist_server_port  [VLC PATH]");
+		}else if(args.length==3){
+			ui.setVlcPath(args[2]);
+		}
+
+		
 
 		Scanner sc = new Scanner(System.in);
 
@@ -120,6 +131,8 @@ public class ClientUI {
 					e.printStackTrace();
 				}
 
+			}else if(input.equals("quit")){
+				return;
 			}
 		}
 
@@ -176,7 +189,7 @@ public class ClientUI {
 		try {
 			this.p = Runtime.getRuntime().exec(
 					new String[] {
-							"C://Program Files (x86)//VideoLAN//VLC//vlc.exe",
+							this.vlcPath,
 							"--play-and-exit", this.currentResource.getUrl() });
 		} catch (IOException ioe) {
 			System.err.println("IO exception: " + ioe.getMessage());
