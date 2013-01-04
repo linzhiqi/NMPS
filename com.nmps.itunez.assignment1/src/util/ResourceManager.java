@@ -3,11 +3,13 @@ package util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ResourceManager {
 	private FileHelper filehelper;
 	private String base;
+	public final static String defaultBasePath = "C:\\Users\\Vita\\Documents\\study\\3152\\assignment";
 
 	public ResourceManager(String base) {
 
@@ -45,6 +47,12 @@ public class ResourceManager {
 
 	public long getResourceSize(String fileName) {
 		return getResource(fileName).getTotalSpace();
+	}
+	
+	public File createFile(String name) throws IOException{
+		File file = new File(base+"\\"+name);
+		file.createNewFile();
+		return file;
 	}
 
 }
