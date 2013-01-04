@@ -30,7 +30,7 @@ public class PlaylistServer implements Runnable {
 	private final ExecutorService pool;
 	private String localIp;
 
-	PlaylistServer(int port, ResourceManager manager) {
+	public PlaylistServer(int port, ResourceManager manager) {
 		super();
 		this.rManager = manager;
 		this.port = port;

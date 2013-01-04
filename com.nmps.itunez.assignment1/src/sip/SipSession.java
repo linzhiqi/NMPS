@@ -64,6 +64,12 @@ public class SipSession {
 
 		while (true) {
 			if (this.state == SessionState.bye) {
+				try {
+					this.socket.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				this.server.removeSession(sessionId);
 				break;
 			}
