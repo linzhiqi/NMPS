@@ -86,7 +86,7 @@ public class RTPServer {
 		//resume rtp sending timer
 		this.timer = new Timer();
 		this.rtpTask = new SendRTPTask(this,this.iStream,this.reManager.getResourceSize(this.resourceName),this.serverSocket[0],this.clientIp,this.clientport[0]);
-		this.timer.schedule(rtpTask, 0, 100);
+		this.timer.schedule(rtpTask, 0, 40);
 	}
 	
 	public void stop(){

@@ -108,7 +108,6 @@ public class ClientUI {
 				if (input == null) {
 					System.out.println("null input");
 				}
-				System.out.println(input);
 				int id = Integer.parseInt(input);
 				ui.playResource(id);
 
@@ -189,8 +188,8 @@ public class ClientUI {
 		try {
 			this.p = Runtime.getRuntime().exec(
 					new String[] {
-							this.vlcPath,
-							"--play-and-exit", this.currentResource.getUrl() });
+							this.vlcPath,"--play-and-exit",
+							 this.currentResource.getUrl() });
 		} catch (IOException ioe) {
 			System.err.println("IO exception: " + ioe.getMessage());
 		}

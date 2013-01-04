@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class ResourceManager {
 	private FileHelper filehelper;
 	private String base;
-	public final static String defaultBasePath = "C:\\Users\\Vita\\Documents\\study\\3152\\assignment";
+	public final static String defaultBasePath = "C:\\Users\\Vita\\Documents\\study\\3152\\assignment\\mediahouse";
 
 	public ResourceManager(String base) {
 
