@@ -26,14 +26,18 @@ public class Sdp {
 		buf.append("c=IN IP4 0.0.0.0"+CRLF);
 		buf.append("t=0 0"+CRLF);
 		buf.append("a=tool:Itunez"+CRLF);
+		if(range!=0){
 		buf.append("a=range:npt=0-"+range+CRLF);
+		}else{
+			buf.append("a=range:npt=0-"+CRLF);
+		}
 		buf.append("a=recvonly"+CRLF);
 		buf.append("a=type:unicast"+CRLF);
 		buf.append("a=charset:UTF-8"+CRLF);
 		buf.append("a=control:"+rtspUri+CRLF);
 		buf.append("m=audio 0 RTP/AVP "+String.valueOf(PCMA_TYPE)+CRLF);
 		buf.append("b=AS:128"+CRLF);
-		buf.append("a=rtpmap:"+String.valueOf(PCMA_TYPE)+" PCMA/8000/2"+CRLF);
+		buf.append("a=rtpmap:"+String.valueOf(PCMA_TYPE)+" PCMA/8000/1"+CRLF);
 		return buf.toString();
 		
 	}

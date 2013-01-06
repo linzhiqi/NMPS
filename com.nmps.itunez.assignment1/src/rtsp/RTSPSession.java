@@ -92,7 +92,7 @@ public class RTSPSession {
 				ResourceManager reManager = this.stack.getResourceManager();
 				if (reManager.getFileHelper().hasFile(this.resource)) {
 					String sdp = Sdp.getSdp(this.sessionId, request.getUri(),
-							120);
+							0);
 					response.setCode(true);
 					response.setHeader("Content-type", "application/sdp");
 					response.setHeader("Content-base", request.getUri());

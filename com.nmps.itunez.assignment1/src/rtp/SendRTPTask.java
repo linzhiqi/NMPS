@@ -11,7 +11,7 @@ public class SendRTPTask extends TimerTask {
 
 	private FileInputStream istream;
 	private long size;
-	private int chunksize = 800;
+	private int chunksize = 320;
 	private DatagramSocket RTPsocket;
 	private byte[] buf = new byte[this.chunksize];
 	private DatagramPacket senddp;
