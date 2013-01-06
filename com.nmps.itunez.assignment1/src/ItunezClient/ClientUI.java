@@ -119,7 +119,6 @@ public class ClientUI {
 			 * }
 			 */else if (input.equals("newlist")) {
 
-				client = new ItunezClient(args[0], Integer.parseInt(args[1]));
 				try {
 					ui.setPlayList(client.requestPlayList());
 				} catch (InvalidePlayListException e) {
