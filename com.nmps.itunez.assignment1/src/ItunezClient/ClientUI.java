@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
@@ -29,14 +30,14 @@ public class ClientUI {
 	private int currentId;
 	private UiState state = UiState.ini;
 	private Process p;
-	
-	public void setVlcPath(String path){
+
+	public void setVlcPath(String path) {
 		this.vlcPath = path;
 	}
 
 	public void setPlayList(PlayList list) {
 		this.playlist = list;
-		if(this.playlist==null){
+		if (this.playlist == null) {
 			System.out.println("no playlist available");
 			return;
 		}
@@ -59,14 +60,13 @@ public class ClientUI {
 
 	public final static void main(String[] args) throws IOException {
 		ClientUI ui = new ClientUI();
-		
-		if(args.length<2||args.length>3){
-			System.out.println("ClientUI  playlist_server_ip  playlist_server_port  [VLC PATH]");
-		}else if(args.length==3){
+
+		if (args.length < 2 || args.length > 3) {
+			System.out
+					.println("ClientUI  playlist_server_ip  playlist_server_port  [VLC PATH]");
+		} else if (args.length == 3) {
 			ui.setVlcPath(args[2]);
 		}
-
-		
 
 		Scanner sc = new Scanner(System.in);
 
@@ -118,18 +118,25 @@ public class ClientUI {
 			 * 
 			 * }
 			 */else if (input.equals("newlist")) {
-
+				PlayList list = null;
 				try {
-					ui.setPlayList(client.requestPlayList());
-				} catch (InvalidePlayListException e) {
+					list = client.requestPlayList();
+				} catch (InvalidePlayListException e1) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InvalidePlayListResponse e) {
+					e1.printStackTrace();
+				} catch (InvalidePlayListResponse e1) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					e1.printStackTrace();
+				} catch (SocketTimeoutException e1){
+					System.out.println("Playlist socket timeout");
+					list = null;
 				}
 
-			}else if(input.equals("quit")){
+				if (list != null) {
+					ui.setPlayList(list);
+				}
+
+			} else if (input.equals("quit")) {
 				return;
 			}
 		}
@@ -186,9 +193,8 @@ public class ClientUI {
 	public void play() {
 		try {
 			this.p = Runtime.getRuntime().exec(
-					new String[] {
-							this.vlcPath,"--play-and-exit",
-							 this.currentResource.getUrl() });
+					new String[] { this.vlcPath, "--play-and-exit",
+							this.currentResource.getUrl() });
 		} catch (IOException ioe) {
 			System.err.println("IO exception: " + ioe.getMessage());
 		}

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
 import ItunezAPI.InvalidePlayListException;
@@ -28,7 +29,7 @@ public class ItunezClient {
 		
 	}
 
-	public PlayList requestPlayList() throws InvalidePlayListException, InvalidePlayListResponse{
+	public PlayList requestPlayList() throws SocketTimeoutException ,InvalidePlayListException, InvalidePlayListResponse{
 		
 		try {
 			this.socket = new Socket(this.serverIp,this.serverPort);
@@ -55,7 +56,7 @@ public class ItunezClient {
 		out.flush();
 	}
 	
-	private PlayList getResponse(BufferedReader in) throws IOException, InvalidePlayListException, InvalidePlayListResponse{
+	private PlayList getResponse(BufferedReader in) throws SocketTimeoutException ,IOException, InvalidePlayListException, InvalidePlayListResponse{
 		int len = 0;
 		String responseLine = in.readLine();
 		char[] cbuf = null;
@@ -89,6 +90,9 @@ public class ItunezClient {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvalidePlayListResponse e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SocketTimeoutException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
